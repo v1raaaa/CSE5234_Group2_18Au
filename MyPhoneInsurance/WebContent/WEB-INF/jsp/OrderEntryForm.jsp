@@ -13,6 +13,11 @@
 	<form:form modelAttribute="order" method="post" action="purchase/submitItems">
 
 	    <table>
+	    	<tr>
+	    		<td colspan="2">Item</td>
+	    		<td>Price</td>
+	    		<td>Add</td>
+	    	</tr>
 			<c:forEach items="${order.items}" var="item" varStatus="loop">
 				<tr>
 					<td><c:out value="${item.name}"></c:out></td>

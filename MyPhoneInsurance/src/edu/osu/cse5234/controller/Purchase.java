@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.osu.cse5234.model.Order;
 import edu.osu.cse5234.model.PaymentInfo;
+import edu.osu.cse5234.model.ShippingInfo;
 import edu.osu.cse5234.model.Item;
 
 @Controller
 @RequestMapping("/purchase")
 public class Purchase {
 	
-//	TODO - add static list of Items to be added on init 
 	private static List<Item> catalog; 
 	
 	@PostConstruct
@@ -50,47 +50,53 @@ public class Purchase {
 	
 	@RequestMapping(path = "/submitItems", method = RequestMethod.POST)
 	public String submitItems(@ModelAttribute("order") Order order, HttpServletRequest request) {
+//		TODO: validate order
 		request.getSession().setAttribute("order", order);
 		return "redirect:/purchase/paymentEntry";
 	}
 	
 	@RequestMapping(path = "/paymentEntry", method = RequestMethod.GET)
-	public String viewPaymentEntryForm(HttpServletRequest request, HttpServletResponse response) {
+	public String viewPaymentEntryForm(HttpServletRequest request) {
 		request.setAttribute("payment", new PaymentInfo());
 		return "PaymentEntryForm";
 	}
 	
 	@RequestMapping(path = "/submitPayment", method = RequestMethod.POST)
-	public String submitPayment() {
-//		 TODO PRG on payment object
-		return null;
+	public String submitPayment(@ModelAttribute("paymentInfo") PaymentInfo paymentInfo, HttpServletRequest request) {
+//		TODO: validate payment
+		
+		// NOTE: should we store payment info in session?
+		request.getSession().setAttribute("paymentInfo", paymentInfo);
+		return "redirect:/purchase/shippingEntry";
 	}
 	
 	@RequestMapping(path = "/shippingEntry", method = RequestMethod.GET)
-	public String shippingEntry() {
-		return null;
+	public String shippingEntry(HttpServletRequest request, HttpServletResponse response) {
+		request.setAttribute("shipping", new ShippingInfo());
+		return "ShippingEntryForm";
 	}
 	
 	@RequestMapping(path = "/submitShipping", method = RequestMethod.POST)
 //	TODO PRG on shipping object
-	public String submitShipping() {
-		return null;
+	public String submitShipping(@ModelAttribute("shippingInfo") ShippingInfo shippingInfo, HttpServletRequest request) {
+		request.setAttribute("shippingInfo", shippingInfo);
+		return "redirect:/purchase/viewOrder";
 	}
 	
 	@RequestMapping(path = "/viewOrder", method = RequestMethod.GET)
-	public String viewOrder() {
-		return null;
+	public String viewOrder(HttpServletRequest request) {
+		// view order attribute in request
+		return "ViewOrder";
 	}
 	
 	@RequestMapping(path = "/confirmOrder", method = RequestMethod.POST)
 	public String confirmOrder() {
-//		TODO assert this.order == order
-		return null;
+		return "redirect:/purchase/viewConfirmation";
 	}
 	
 	@RequestMapping(path = "/viewConfirmation", method = RequestMethod.GET)
 	public String viewConfirmation() {
-		return null;
+		return "Confirmation";
 	}
 
 }
