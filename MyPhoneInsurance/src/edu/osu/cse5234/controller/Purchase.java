@@ -1,5 +1,9 @@
 package edu.osu.cse5234.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -10,16 +14,37 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.osu.cse5234.model.Order;
 import edu.osu.cse5234.model.PaymentInfo;
+import edu.osu.cse5234.model.Item;
 
 @Controller
 @RequestMapping("/purchase")
 public class Purchase {
 	
 //	TODO - add static list of Items to be added on init 
+	private static List<Item> catalog; 
+	
+	@PostConstruct
+	public void onInit() {		
+		Item screenInsurance = new Item("Screen Insurance", "5.00");
+		Item batteryInsurance = new Item("Battery Insurance","2.00");
+		Item cameraInsurance = new Item("Camera Insurance", "1.50");
+		Item chargerInsurance = new Item("Charger Insurance", "2.50");
+		Item bundledInsurance = new Item("Bundled Insurance", "9.00");
+		
+		catalog = new ArrayList<Item>();
+		catalog.add(screenInsurance);
+		catalog.add(batteryInsurance);
+		catalog.add(cameraInsurance);
+		catalog.add(chargerInsurance);
+		catalog.add(bundledInsurance);
+	}
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public String viewOrderEntryForm(HttpServletRequest request) {
-//		TODO - instantiate Order object, set list of items to list of static items, set order object in request 
+		Order order = new Order();
+		order.setItems(catalog);
+		
+		request.setAttribute("order", order);
 		return "OrderEntryForm";
 	}
 	
