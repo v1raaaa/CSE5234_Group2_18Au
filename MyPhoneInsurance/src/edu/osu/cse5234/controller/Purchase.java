@@ -86,6 +86,16 @@ public class Purchase {
 	@RequestMapping(path = "/viewOrder", method = RequestMethod.GET)
 	public String viewOrder(HttpServletRequest request) {
 		// view order attribute in request
+		Order current_Order=(Order) request.getSession().getAttribute("order");
+		List<Item> item_List=current_Order.getItems();
+		int total=0;
+		for(int i=0;i<item_List.size();i++)
+		{
+			Item y=item_List.get(i);
+			total=total+ Integer.parseInt(y.getPrice())*Integer.parseInt(y.getQuantity());
+		}
+		System.out.println(total);
+		request.setAttribute("TotalPrice", total);
 		return "ViewOrder";
 	}
 	
