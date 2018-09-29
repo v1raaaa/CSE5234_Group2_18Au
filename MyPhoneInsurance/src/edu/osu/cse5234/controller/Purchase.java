@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +21,7 @@ import edu.osu.cse5234.model.Item;
 @Controller
 @RequestMapping("/purchase")
 public class Purchase {
-	
+	@Autowired
 	private static List<Item> catalog; 
 	
 	@PostConstruct
@@ -57,7 +58,7 @@ public class Purchase {
 	
 	@RequestMapping(path = "/paymentEntry", method = RequestMethod.GET)
 	public String viewPaymentEntryForm(HttpServletRequest request) {
-		request.setAttribute("payment", new PaymentInfo());
+		request.setAttribute("paymentInfo", new PaymentInfo());
 		return "PaymentEntryForm";
 	}
 	
