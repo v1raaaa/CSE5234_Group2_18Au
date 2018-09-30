@@ -39,12 +39,11 @@ public class Purchase {
 		catalog.add(chargerInsurance);
 		catalog.add(bundledInsurance);
 	}
-	
+		
 	@RequestMapping(method = RequestMethod.GET)
 	public String viewOrderEntryForm(HttpServletRequest request) {
 		Order order = new Order();
 		order.setItems(catalog);
-		System.out.println(order.getItems().get(0).getName());
 		request.setAttribute("order", order);
 		return "OrderEntryForm";
 	}
@@ -52,28 +51,36 @@ public class Purchase {
 	@RequestMapping(path = "/submitItems", method = RequestMethod.POST)
 	public String submitItems(@ModelAttribute("order") Order order, HttpServletRequest request) {
 //		TODO: validate order
-		System.out.println(order.getItems().get(0).getQuantity());
-		System.out.println(order.getItems().get(0).getName());
+//		System.out.println(order.getItems().get(0).getQuantity());
+//		System.out.println(order.getItems().get(0).getName());
 		request.getSession().setAttribute("order", order); // save order in session for confirmation and price calculation
 		return "redirect:/purchase/paymentEntry";
 	}
 	
 	@RequestMapping(path = "/paymentEntry", method = RequestMethod.GET)
 	public String viewPaymentEntryForm(HttpServletRequest request) {
+		
+		if (request.getSession().getAttribute("order") == null) {
+			return "redirect:/purchase";
+		}
+		
 		request.setAttribute("paymentInfo", new PaymentInfo());
 		return "PaymentEntryForm";
 	}
 	
 	@RequestMapping(path = "/submitPayment", method = RequestMethod.POST)
 	public String submitPayment(@ModelAttribute("paymentInfo") PaymentInfo paymentInfo, HttpServletRequest request) {
-//		TODO: validate payment
-		
 		request.getSession().setAttribute("paymentInfo", paymentInfo);
 		return "redirect:/purchase/shippingEntry";
 	}
 	
 	@RequestMapping(path = "/shippingEntry", method = RequestMethod.GET)
 	public String shippingEntry(HttpServletRequest request, HttpServletResponse response) {
+		
+		if (request.getSession().getAttribute("paymentInfo") == null) {
+			return "redirect:/purchase/paymentEntry";
+		}
+		
 		request.setAttribute("shippingInfo", new ShippingInfo());
 		return "ShippingEntryForm";
 	}
@@ -87,17 +94,23 @@ public class Purchase {
 	
 	@RequestMapping(path = "/viewOrder", method = RequestMethod.GET)
 	public String viewOrder(HttpServletRequest request) {
-		// view order attribute in request
-		Order current_Order=(Order) request.getSession().getAttribute("order");
-		List<Item> item_List=current_Order.getItems();
-		int total=0;
-		for(int i=0;i<item_List.size();i++)
-		{
-			Item y=item_List.get(i);
-			total=total+ Integer.parseInt(y.getPrice())*Integer.parseInt(y.getQuantity());
+		
+		if (request.getSession().getAttribute("shippingInfo") == null) {
+			return "redirect:/purchase/shippingEntry";
 		}
-		System.out.println(total);
-		request.setAttribute("TotalPrice", total);
+		
+		Order currentOrder = (Order) request.getSession().getAttribute("order");
+		List<Item> item_List = currentOrder.getItems();
+		double total = 0;
+		
+		for(int i = 0; i < item_List.size(); i++) {
+			Item y = item_List.get(i);
+			int quantity = y.getQuantity().length() == 0 ? 0 : Integer.parseInt(y.getQuantity());
+			total += Double.parseDouble(y.getPrice()) * quantity;
+		}
+		
+		request.setAttribute("totalPrice", total);
+		request.getSession().setAttribute("totalPrice", total);
 		return "ViewOrder";
 	}
 	

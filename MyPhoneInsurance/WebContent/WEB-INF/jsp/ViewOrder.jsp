@@ -10,26 +10,29 @@
 <title>View Order</title>
 </head>
 <body>
-<form:form modelAttribute="order" method="post" action="purchase/Confirmation">
-
-	    <table>
+	<h2>Order Confirmation</h2>
+	<h3>Total Price: $<%= request.getSession().getAttribute("totalPrice") %></h3>
+	<form:form method="post" action="confirmOrder">
+		 <table style="border: 1px">
 	    	<tr>
 	    		<td colspan="1">Item</td>
 	    		<td>Price</td>
 	    		<td>Quantity</td>
 	    	</tr>
 			<c:forEach items="${order.items}" var="item" varStatus="loop">
-				<tr>
-					<td><c:out value="${item.name}"></c:out></td>
-					<td><c:out value="$${item.price}"></c:out></td>
-					<td><c:out value="$${item.quantity}"></c:out></td>
-				</tr>
+				<c:if test = "${not empty item.quantity}">
+					<tr>
+						<td><c:out value="${item.name}"></c:out></td>
+						<td><c:out value="$${item.price}"></c:out></td>
+						<td><c:out value="${item.quantity}"></c:out></td>
+					</tr>
+				</c:if>
 			</c:forEach>
-		  	<tr>
-		  	    <li><p><b>TotalAmount :</b><%= request.getParameter("total")%>
-				<td colspan="2"><input type="submit" value="Purchase"></td>
-		  	</tr>
-	    </table>
+    	</table>	
+    	<br />
+    	<br />
+    	<input type="submit" value="Confirm">
 	</form:form>
+
 </body>
 </html>
