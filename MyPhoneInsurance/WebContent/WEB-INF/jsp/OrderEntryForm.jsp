@@ -14,9 +14,9 @@
 
 	    <table>
 	    	<tr>
-	    		<td colspan="2">Item</td>
+	    		<td colspan="1">Item</td>
 	    		<td>Price</td>
-	    		<td>Add</td>
+	    		<td>Enter Quantity</td>
 	    	</tr>
 			<c:forEach items="${order.items}" var="item" varStatus="loop">
 				<tr>

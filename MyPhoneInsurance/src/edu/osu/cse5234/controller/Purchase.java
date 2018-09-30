@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +21,7 @@ import edu.osu.cse5234.model.Item;
 @Controller
 @RequestMapping("/purchase")
 public class Purchase {
-	
+	@Autowired
 	private static List<Item> catalog; 
 	
 	@PostConstruct
@@ -59,7 +60,7 @@ public class Purchase {
 	
 	@RequestMapping(path = "/paymentEntry", method = RequestMethod.GET)
 	public String viewPaymentEntryForm(HttpServletRequest request) {
-		request.setAttribute("payment", new PaymentInfo());
+		request.setAttribute("paymentInfo", new PaymentInfo());
 		return "PaymentEntryForm";
 	}
 	
@@ -87,6 +88,16 @@ public class Purchase {
 	@RequestMapping(path = "/viewOrder", method = RequestMethod.GET)
 	public String viewOrder(HttpServletRequest request) {
 		// view order attribute in request
+		Order current_Order=(Order) request.getSession().getAttribute("order");
+		List<Item> item_List=current_Order.getItems();
+		int total=0;
+		for(int i=0;i<item_List.size();i++)
+		{
+			Item y=item_List.get(i);
+			total=total+ Integer.parseInt(y.getPrice())*Integer.parseInt(y.getQuantity());
+		}
+		System.out.println(total);
+		request.setAttribute("TotalPrice", total);
 		return "ViewOrder";
 	}
 	
