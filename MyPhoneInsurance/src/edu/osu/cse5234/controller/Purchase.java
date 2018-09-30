@@ -43,7 +43,7 @@ public class Purchase {
 	public String viewOrderEntryForm(HttpServletRequest request) {
 		Order order = new Order();
 		order.setItems(catalog);
-		
+		System.out.println(order.getItems().get(0).getName());
 		request.setAttribute("order", order);
 		return "OrderEntryForm";
 	}
@@ -51,7 +51,9 @@ public class Purchase {
 	@RequestMapping(path = "/submitItems", method = RequestMethod.POST)
 	public String submitItems(@ModelAttribute("order") Order order, HttpServletRequest request) {
 //		TODO: validate order
-		request.getSession().setAttribute("order", order);
+		System.out.println(order.getItems().get(0).getQuantity());
+		System.out.println(order.getItems().get(0).getName());
+		request.getSession().setAttribute("order", order); // save order in session for confirmation and price calculation
 		return "redirect:/purchase/paymentEntry";
 	}
 	
@@ -65,21 +67,20 @@ public class Purchase {
 	public String submitPayment(@ModelAttribute("paymentInfo") PaymentInfo paymentInfo, HttpServletRequest request) {
 //		TODO: validate payment
 		
-		// NOTE: should we store payment info in session?
 		request.getSession().setAttribute("paymentInfo", paymentInfo);
 		return "redirect:/purchase/shippingEntry";
 	}
 	
 	@RequestMapping(path = "/shippingEntry", method = RequestMethod.GET)
 	public String shippingEntry(HttpServletRequest request, HttpServletResponse response) {
-		request.setAttribute("shipping", new ShippingInfo());
+		request.setAttribute("shippingInfo", new ShippingInfo());
 		return "ShippingEntryForm";
 	}
 	
 	@RequestMapping(path = "/submitShipping", method = RequestMethod.POST)
-//	TODO PRG on shipping object
 	public String submitShipping(@ModelAttribute("shippingInfo") ShippingInfo shippingInfo, HttpServletRequest request) {
 		request.setAttribute("shippingInfo", shippingInfo);
+		request.getSession().setAttribute("shippingInfo", shippingInfo); // save shipping info for order confirmation
 		return "redirect:/purchase/viewOrder";
 	}
 	
