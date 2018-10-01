@@ -2,6 +2,7 @@ package edu.osu.cse5234.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -120,7 +121,8 @@ public class Purchase {
 	}
 	
 	@RequestMapping(path = "/viewConfirmation", method = RequestMethod.GET)
-	public String viewConfirmation() {
+	public String viewConfirmation(HttpServletRequest request) {
+		request.getSession().setAttribute("uuid", UUID.randomUUID().toString());
 		return "Confirmation";
 	}
 

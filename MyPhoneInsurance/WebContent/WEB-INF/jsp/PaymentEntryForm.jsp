@@ -12,19 +12,10 @@
 
 	<form:form modelAttribute="paymentInfo" method="post" action="submitPayment">
 	    <table>
-	    	<tr>
-	    		<th>Credit Card Number</th>
-	    		<th>Expiration Date</th>
-	    		<th>CVV Code</th>
-	    		<th>Card Holder Name</th>
-	    	</tr>
-			<tr>
-				<td><form:input path="creditCardNumber" /></td>
-				<td><form:input path="expirationDate" /></td>
-				<td><form:input path="cvvCode" /></td>
-				<td><form:input path="cardHolderName" /></td>
-			</tr>
-			
+			<tr><td>Credit Card Number</td><td><form:input path="creditCardNumber" /></td></tr>
+			<tr><td>Expiration Date</td><td><form:input path="expirationDate" /></td></tr>
+			<tr><td>CVV Code</td><td><form:input path="cvvCode" /></td></tr>
+			<tr><td>Card Holder Name</td><td><form:input path="cardHolderName" /></td></tr>
 		  	<tr>
 				<td colspan="4" height="50"><input type="submit" value="Confirm"></td>
 		  	</tr>

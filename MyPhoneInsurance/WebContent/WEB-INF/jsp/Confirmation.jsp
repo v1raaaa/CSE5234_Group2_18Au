@@ -10,7 +10,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h3>Thank you, <c:out value="${shippingInfo.name}"/>! Your order has been confirmed.</h3>
+	<h3>Thank you, <c:out value="${shippingInfo.name}"/>! Your order has been confirmed. Your order ID is <%= request.getSession().getAttribute("uuid") %>.</h3>
+	
 	
 	<h4>Shipping Address:</h4>
 	<table>

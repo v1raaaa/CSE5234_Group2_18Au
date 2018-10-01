@@ -10,7 +10,7 @@
 <title>View Order</title>
 </head>
 <body>
-	<h2>Order Confirmation</h2>
+	<h2>Review Your Order</h2>
 	<h3>Total Price: $<%= request.getSession().getAttribute("totalPrice") %></h3>
 	<form:form method="post" action="confirmOrder">
 		 <table style="border: 1px">

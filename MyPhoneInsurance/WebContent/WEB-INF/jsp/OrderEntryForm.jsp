@@ -2,7 +2,7 @@
     pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-    
+   
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,8 +10,7 @@
 <title>Order Form</title>
 </head>
 <body>
-	<form:form modelAttribute="order" method="post" action="purchase/submitItems">
-
+	<form:form modelAttribute="order" method="post" action="/MyPhoneInsurance/purchase/submitItems">
 	    <table>
 	    	<tr>
 	    		<td colspan="1">Item</td>
