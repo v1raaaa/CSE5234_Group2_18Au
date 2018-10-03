@@ -200,4 +200,11 @@ li a:hover:not(.active) {
 .invalid #invalid {
 	color: #FF0000;
 	font-weight: bold;
+} 
+
+.img-circle{
+	border-radius:50%;
+	height: 10%;
+	width: 10%;
+	border : 4px solid #4CAF50;
 }
