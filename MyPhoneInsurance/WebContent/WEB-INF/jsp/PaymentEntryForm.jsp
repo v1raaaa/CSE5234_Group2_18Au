@@ -5,11 +5,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel = "stylesheet" type = "text/css" href="css/mystyle.css">
 <meta charset="ISO-8859-1">
 <title>Payment Form</title>
 </head>
 <body>
-
+	<h2>Enter your payment information:</h2>
 	<form:form modelAttribute="paymentInfo" method="post" action="submitPayment">
 	    <table>
 			<tr><td>Credit Card Number</td><td><form:input path="creditCardNumber" /></td></tr>
@@ -20,7 +21,6 @@
 				<td colspan="4" height="50"><input type="submit" value="Confirm"></td>
 		  	</tr>
 	    </table>
-	</form:form>
-	
+	</form:form>	
 </body>
 </html>

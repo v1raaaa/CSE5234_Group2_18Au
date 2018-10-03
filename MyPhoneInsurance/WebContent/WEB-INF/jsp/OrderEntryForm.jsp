@@ -6,10 +6,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel = "stylesheet" type = "text/css" href="css/mystyle.css">
 <meta charset="ISO-8859-1">
 <title>Order Form</title>
 </head>
 <body>
+	<h2>Order Entry Form</h2>
 	<form:form modelAttribute="order" method="post" action="/MyPhoneInsurance/purchase/submitItems">
 	    <table>
 	    	<tr>
@@ -31,6 +33,5 @@
 		  	</tr>
 	    </table>
 	</form:form>
-
 </body>
 </html>

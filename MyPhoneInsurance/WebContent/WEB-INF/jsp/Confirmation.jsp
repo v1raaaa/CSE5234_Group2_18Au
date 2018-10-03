@@ -6,6 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel = "stylesheet" type = "text/css" href="css/mystyle.css">
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
 </head>

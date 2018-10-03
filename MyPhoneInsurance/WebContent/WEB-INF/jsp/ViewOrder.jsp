@@ -6,6 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel = "stylesheet" type = "text/css" href="css/mystyle.css">
 <meta charset="ISO-8859-1">
 <title>View Order</title>
 </head>
@@ -33,6 +34,5 @@
     	<br />
     	<input type="submit" value="Confirm">
 	</form:form>
-
 </body>
 </html>
