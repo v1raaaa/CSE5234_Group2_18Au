@@ -4,9 +4,19 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Contact Us!</title>
 </head>
 <body>
-Contact Us..
+	<jsp:include page = "Header.jsp"/>
+	<h2>Contact Us</h2>
+	<div>
+		<p>Email us at: </p>
+		<table>
+			<tr><td><a href="mailto:doan.95@osu.edu?Subject=MyPhoneInsurance" target="_top">doan.95@osu.edu</a></td></tr>
+			<tr><td><a href="mailto:ling.188@osu.edu?Subject=MyPhoneInsurance" target="_top">ling.188@osu.edu</a></td></tr>
+			<tr><td><a href="mailto:banerjee.146@osu.edu?Subject=MyPhoneInsurance" target="_top">banerjee.146@osu.edu</a></td></tr>
+		</table>	
+	</div>
+	<jsp:include page = "Footer.jsp"/>
 </body>
 </html>

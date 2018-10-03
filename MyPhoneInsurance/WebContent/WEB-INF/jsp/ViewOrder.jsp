@@ -6,19 +6,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel = "stylesheet" type = "text/css" href="css/mystyle.css">
 <meta charset="ISO-8859-1">
 <title>View Order</title>
 </head>
 <body>
+	<jsp:include page = "Header.jsp"/>
 	<h2>Review Your Order</h2>
-	<h3>Total Price: $<%= request.getSession().getAttribute("totalPrice") %></h3>
 	<form:form method="post" action="confirmOrder">
-		 <table style="border: 1px">
+		 <table>
 	    	<tr>
-	    		<td colspan="1">Item</td>
-	    		<td>Price</td>
-	    		<td>Quantity</td>
+	    		<th colspan="1">Item</th>
+	    		<th>Price</th>
+	    		<th>Quantity</th>
 	    	</tr>
 			<c:forEach items="${order.items}" var="item" varStatus="loop">
 				<c:if test = "${not empty item.quantity}">
@@ -31,8 +30,9 @@
 			</c:forEach>
     	</table>	
     	<br />
-    	<br />
-    	<input type="submit" value="Confirm">
+   		<h3>Total Price: $<%= request.getSession().getAttribute("totalPrice") %></h3>    	
+    	<input class="btn" type="submit" value="Confirm">
 	</form:form>
+	<jsp:include page = "Footer.jsp"/>
 </body>
 </html>

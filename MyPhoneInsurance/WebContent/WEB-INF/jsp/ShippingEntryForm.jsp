@@ -6,14 +6,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel = "stylesheet" type = "text/css" href="css/mystyle.css">
 <meta charset="ISO-8859-1">
 <title>Shipping Form</title>
 </head>
 <body>
-	<h2>Enter your shipping information:</h2>
+	<jsp:include page = "Header.jsp"/>
 	<form:form modelAttribute="shippingInfo" method="post" action="submitShipping">
 	    <table>
+	       	<tr><th>Enter your shipping information:</th><th/></tr>
 			<tr>
 				<td>Name</td>
 				<td><form:input path="name" /></td>
@@ -38,10 +38,9 @@
 				<td>ZIP</td>
 				<td><form:input path="zip" /></td>
 			</tr>
-		  	<tr>
-				<td colspan="2"><input type="submit" value="Submit"></td>
-		  	</tr>
 	    </table>
+	    <input class="btn" type="submit" value="Submit">
 	</form:form>
+	<jsp:include page = "Footer.jsp"/>
 </body>
 </html>

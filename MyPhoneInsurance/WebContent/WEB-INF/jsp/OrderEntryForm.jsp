@@ -6,18 +6,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel = "stylesheet" type = "text/css" href="css/mystyle.css">
-<meta charset="ISO-8859-1">
-<title>Order Form</title>
+	<meta charset="ISO-8859-1">
+	<title>Order Form</title>
+	<script src="/MyPhoneInsurance/js/utilityFunctions.js"></script>
 </head>
 <body>
+	<jsp:include page = "Header.jsp"/>
 	<h2>Order Entry Form</h2>
-	<form:form modelAttribute="order" method="post" action="/MyPhoneInsurance/purchase/submitItems">
+	<div id="invalid" class="invalid"></div>
+	<form:form name="orderForm" modelAttribute="order" onsubmit="return validateQuantity()" method="post" action="/MyPhoneInsurance/purchase/submitItems">
 	    <table>
 	    	<tr>
-	    		<td colspan="1">Item</td>
-	    		<td>Price</td>
-	    		<td>Enter Quantity</td>
+	    		<th colspan="1">Item</th>
+	    		<th>Price</th>
+	    		<th>Quantity</th>
 	    	</tr>
 			<c:forEach items="${order.items}" var="item" varStatus="loop">
 				<tr>
@@ -28,10 +30,9 @@
 					<form:hidden path="items[${loop.index}].price" value="${item.price}"/>
 				</tr>
 			</c:forEach>
-		  	<tr>
-				<td colspan="2"><input type="submit" value="Purchase"></td>
-		  	</tr>
 	    </table>
+	    <input class="btn" type="submit" value="Purchase">
 	</form:form>
+	<jsp:include page = "Footer.jsp"/>
 </body>
 </html>

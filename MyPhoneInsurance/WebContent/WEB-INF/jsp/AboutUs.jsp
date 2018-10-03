@@ -4,9 +4,34 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>About Us</title>
 </head>
 <body>
-About us..
+	<jsp:include page = "Header.jsp"/>	
+	<h2>About Us</h2>
+	<div class="bio">
+		<h3>Alex Doan</h3>
+		<p>
+			a
+			<br />
+			b
+			<br />
+			c
+		</p>
+	</div>
+	<div class="bio">
+		<h3>Yi Ling</h3>
+		<p>
+			asdf
+		</p>
+	</div>
+	<div class="bio">
+		<h3>Arnab Banerjee</h3>
+		<p>
+			asdf
+		</p>
+	</div>
+	
+	<jsp:include page = "Footer.jsp"/>
 </body>
 </html>
