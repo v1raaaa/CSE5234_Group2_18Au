@@ -16,6 +16,7 @@
 			<tr><td><a href="mailto:ling.188@osu.edu?Subject=MyPhoneInsurance" target="_top">ling.188@osu.edu</a></td></tr>
 			<tr><td><a href="mailto:banerjee.146@osu.edu?Subject=MyPhoneInsurance" target="_top">banerjee.146@osu.edu</a></td></tr>
 		</table>	
+		<p>Room 395 | 2015 Neil Ave, Columbus, OH 43210</p>
 	</div>
 	<jsp:include page = "Footer.jsp"/>
 </body>

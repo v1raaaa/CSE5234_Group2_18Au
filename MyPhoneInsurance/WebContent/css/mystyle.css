@@ -193,8 +193,7 @@ li a:hover:not(.active) {
 }
 
 .bio {
-	text-align: left;
-	margin-left: 32px;
+	
 }
 
 .invalid #invalid {

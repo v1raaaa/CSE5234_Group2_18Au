@@ -12,7 +12,6 @@
 </head>
 <body>
 	<jsp:include page = "Header.jsp"/>
-	<h2>Order Entry Form</h2>
 	<div id="invalid" class="invalid"></div>
 	<form:form name="orderForm" modelAttribute="order" onsubmit="return validateQuantity()" method="post" action="/MyPhoneInsurance/purchase/submitItems">
 	    <table>
