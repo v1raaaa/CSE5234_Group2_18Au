@@ -1,7 +1,5 @@
 package edu.osu.cse5234.model;
 
-import edu.osu.cse5234.controller.*;
-
 public class PaymentInfo {
 	private String creditCardNumber;
 	private String expirationDate;

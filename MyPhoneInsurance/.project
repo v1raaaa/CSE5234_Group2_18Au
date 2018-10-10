@@ -3,6 +3,7 @@
 	<name>MyPhoneInsurance</name>
 	<comment></comment>
 	<projects>
+		<project>MyPhoneInsurance-InventoryManagement-EJBClient</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

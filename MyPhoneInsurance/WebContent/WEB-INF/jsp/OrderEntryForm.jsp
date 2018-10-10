@@ -12,6 +12,9 @@
 </head>
 <body>
 	<jsp:include page = "Header.jsp"/>
+	<div>
+		<p class="invalid"><%= request.getSession().getAttribute("invalidItemAvailability")%></p>
+	</div>
 	<div id="invalid" class="invalid"></div>
 	<form:form name="orderForm" modelAttribute="order" onsubmit="return validateQuantity()" method="post" action="/MyPhoneInsurance/purchase/submitItems">
 	    <table>

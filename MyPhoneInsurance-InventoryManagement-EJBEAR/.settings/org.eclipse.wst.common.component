@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="MyPhoneInsurance-InventoryManagement-EJBEAR">
+        <wb-resource deploy-path="/" source-path="/" tag="defaultRootSource"/>
+        <dependent-module archiveName="MyPhoneInsurance-InventoryManagement-EJB.jar" deploy-path="/" handle="module:/resource/MyPhoneInsurance-InventoryManagement-EJB/MyPhoneInsurance-InventoryManagement-EJB">
+            <dependent-object>Module_1539195717843</dependent-object>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="MyPhoneInsurance-InventoryManagement-EJBClient.jar" deploy-path="/" handle="module:/resource/MyPhoneInsurance-InventoryManagement-EJBClient/MyPhoneInsurance-InventoryManagement-EJBClient">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+    </wb-module>
+</project-modules>

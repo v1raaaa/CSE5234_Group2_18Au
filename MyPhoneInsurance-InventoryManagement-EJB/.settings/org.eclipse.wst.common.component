@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="MyPhoneInsurance-InventoryManagement-EJB">
+        <wb-resource deploy-path="/" source-path="/ejbModule" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/" source-path="/.apt_generated"/>
+        <property name="java-output-path" value="/MyPhoneInsurance-InventoryManagement-EJB/build/classes"/>
+        <property name="ClientProject" value="MyPhoneInsurance-InventoryManagement-EJBClient"/>
+        <property name="ClientJARURI" value="MyPhoneInsurance-InventoryManagement-EJBClient.jar"/>
+    </wb-module>
+</project-modules>

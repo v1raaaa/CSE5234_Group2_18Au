@@ -12,7 +12,7 @@
 <body>
 	<jsp:include page = "Header.jsp"/>
 	<h3>Thank you, <c:out value="${shippingInfo.name}"/>! Your order has been confirmed. <br/>
-	Your order ID is <%= request.getSession().getAttribute("uuid") %>.</h3>
+	Your confirmation code is <%= request.getSession().getAttribute("confirmationCode") %>.</h3>
 	
 	
 	<table>
