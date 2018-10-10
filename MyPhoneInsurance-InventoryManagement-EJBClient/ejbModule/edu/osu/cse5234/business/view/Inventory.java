@@ -20,4 +20,8 @@ public class Inventory implements Serializable {
 	public void setItems(List<Item> items) {
 		this.items = items;
 	}
+	
+	public Inventory() {
+		
+	}
 }

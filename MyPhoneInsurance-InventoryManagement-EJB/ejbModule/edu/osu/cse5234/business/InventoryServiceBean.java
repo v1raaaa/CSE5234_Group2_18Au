@@ -18,10 +18,15 @@ import javax.ejb.Stateless;
 @Remote(InventoryService.class)
 public class InventoryServiceBean implements InventoryService {
 
-	private static Inventory inventory; 
 	
-	@PostConstruct
-	public void onInit() {		
+    /**
+     * Default constructor. 
+     */
+    public InventoryServiceBean() {
+    }
+
+	@Override
+	public Inventory getAvailableInventory() {
 		Item screenInsurance = new Item("Screen Insurance", "5.00");
 		Item batteryInsurance = new Item("Battery Insurance","2.00");
 		Item cameraInsurance = new Item("Camera Insurance", "1.50");
@@ -35,17 +40,8 @@ public class InventoryServiceBean implements InventoryService {
 		catalog.add(chargerInsurance);
 		catalog.add(bundledInsurance);
 		
+		Inventory inventory = new Inventory();
 		inventory.setItems(catalog);
-	}
-
-    /**
-     * Default constructor. 
-     */
-    public InventoryServiceBean() {
-    }
-
-	@Override
-	public Inventory getAvailableInventory() {
 		return inventory;
 	}
 
