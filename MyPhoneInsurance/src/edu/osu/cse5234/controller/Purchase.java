@@ -5,12 +5,15 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.osu.cse5234.business.model.Item;
+import edu.osu.cse5234.business.view.Inventory;
+import edu.osu.cse5234.business.view.InventoryService;
 import edu.osu.cse5234.model.Order;
 import edu.osu.cse5234.model.PaymentInfo;
 import edu.osu.cse5234.model.ShippingInfo;
@@ -20,12 +23,17 @@ import edu.osu.cse5234.util.ServiceLocator;
 @RequestMapping("/purchase")
 public class Purchase {
 
+
 	@RequestMapping(method = RequestMethod.GET)
 	public String viewOrderEntryForm(HttpServletRequest request) {
 		Order order = new Order();
-		order.setItems(ServiceLocator.getInventoryService().getAvailableInventory().getItems());
+		//order.setItems(ServiceLocator.getInventoryService().getAvailableInventory().getItems());
+		List<Item> items = ServiceLocator.getInventoryService().getAvailableInventory().getItems();
+		for(Item item: items) {
+			item.setQuantity(0);
+		}
+		order.setItems(items);
 		request.setAttribute("order", order);
-		
 		return "OrderEntryForm";
 	}
 	
@@ -90,8 +98,8 @@ public class Purchase {
 		
 		for(int i = 0; i < item_List.size(); i++) {
 			Item y = item_List.get(i);
-			int quantity = y.getQuantity().length() == 0 ? 0 : Integer.parseInt(y.getQuantity());
-			total += Double.parseDouble(y.getPrice()) * quantity;
+			int quantity = y.getQuantity() == 0 ? 0 : y.getQuantity();
+			total += y.getPrice() * quantity;
 		}
 		
 		request.setAttribute("totalPrice", total);

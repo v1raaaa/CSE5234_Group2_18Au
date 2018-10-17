@@ -10,6 +10,8 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  * Session Bean implementation class InventoryServiceBean
@@ -19,34 +21,37 @@ import javax.ejb.Stateless;
 public class InventoryServiceBean implements InventoryService {
 
 	
+	@PersistenceContext
+	private EntityManager entityManager;
+	private final String MY_QUERY = "Select i from Item i";
+	private List<Item> catalog = new ArrayList<Item>();
+
     /**
      * Default constructor. 
      */
     public InventoryServiceBean() {
+    	catalog = null;
     }
 
 	@Override
 	public Inventory getAvailableInventory() {
-		Item screenInsurance = new Item("Screen Insurance", "5.00");
-		Item batteryInsurance = new Item("Battery Insurance","2.00");
-		Item cameraInsurance = new Item("Camera Insurance", "1.50");
-		Item chargerInsurance = new Item("Charger Insurance", "2.50");
-		Item bundledInsurance = new Item("Bundled Insurance", "9.00");
-		
-		ArrayList<Item> catalog = new ArrayList<Item>();
-		catalog.add(screenInsurance);
-		catalog.add(batteryInsurance);
-		catalog.add(cameraInsurance);
-		catalog.add(chargerInsurance);
-		catalog.add(bundledInsurance);
-		
-		Inventory inventory = new Inventory();
-		inventory.setItems(catalog);
-		return inventory;
+		catalog = entityManager.createQuery(MY_QUERY, Item.class).getResultList();
+		return new Inventory(catalog);
 	}
 
 	@Override
 	public boolean validateQuantity(List<Item> items) {
+		for(Item orderItem: items) {
+			if(orderItem.getQuantity() > 0) {
+				for(Item inventoryItem: catalog) {
+					if(orderItem.getName().equals(inventoryItem.getName())) {
+						if(orderItem.getQuantity() > inventoryItem.getQuantity()) {
+							return false;
+						}
+					}
+				}
+			}
+		}
 		return true;
 	}
 

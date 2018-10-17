@@ -1,12 +1,21 @@
-<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="MyPhoneInsurance">
-        <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/.apt_generated"/>
-        <dependent-module archiveName="MyPhoneInsurance-InventoryManagement-EJBClient.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/MyPhoneInsurance-InventoryManagement-EJBClient/MyPhoneInsurance-InventoryManagement-EJBClient">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <property name="java-output-path" value="/MyPhoneInsurance/WebContent/WEB-INF/classes"/>
-        <property name="context-root" value="MyPhoneInsurance"/>
-    </wb-module>
+<?xml version="1.0" encoding="UTF-8"?>
+<project-modules id="moduleCoreId"
+	project-version="1.5.0">
+	<wb-module deploy-name="MyPhoneInsurance">
+		<wb-resource deploy-path="/" source-path="/WebContent"
+			tag="defaultRootSource" />
+		<wb-resource deploy-path="/WEB-INF/classes"
+			source-path="/src" />
+		<wb-resource deploy-path="/WEB-INF/classes"
+			source-path="/.apt_generated" />
+		<dependent-module
+			archiveName="MyPhoneInsurance-InventoryManagement-EJBClient.jar"
+			deploy-path="/WEB-INF/lib"
+			handle="module:/resource/MyPhoneInsurance-InventoryManagement-EJBClient/MyPhoneInsurance-InventoryManagement-EJBClient">
+			<dependency-type>uses</dependency-type>
+		</dependent-module>
+		<property name="java-output-path"
+			value="/MyPhoneInsurance/WebContent/WEB-INF/classes" />
+		<property name="context-root" value="MyPhoneInsurance" />
+	</wb-module>
 </project-modules>

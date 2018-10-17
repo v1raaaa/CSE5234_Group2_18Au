@@ -2,7 +2,7 @@ function isValidQuantity(x) {
   return !isNaN(x) && 
      parseInt(Number(x)) == x && 
      !isNaN(parseInt(x, 10)) &&
-     Number(x) > 0;
+     Number(x) >= 0;
 }
 function validateQuantity() {
 	var items = document.forms["orderForm"].elements;

@@ -13,6 +13,7 @@ public class Inventory implements Serializable {
 	
 	List<Item> items;
 
+
 	public List<Item> getItems() {
 		return items;
 	}
@@ -24,4 +25,9 @@ public class Inventory implements Serializable {
 	public Inventory() {
 		
 	}
+	
+	public Inventory(List<Item> items) {
+		this.items = items;
+	}
+	
 }
