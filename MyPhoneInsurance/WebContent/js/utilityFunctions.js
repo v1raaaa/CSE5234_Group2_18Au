@@ -7,7 +7,7 @@ function isValidQuantity(x) {
 function validateQuantity() {
 	var items = document.forms["orderForm"].elements;
 	var formValid = true;
-	for (var i = 0; i < items.length - 2; i+=3) {
+	for (var i = 0; i < items.length - 2; i+=5) {
 		var quantity = items[i].value;
 		if(quantity.trim().length > 0 && !isValidQuantity(quantity)) { 
 			console.log("Invalid quantity: " + quantity)

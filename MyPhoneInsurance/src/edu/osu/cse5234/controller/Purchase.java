@@ -1,5 +1,6 @@
 package edu.osu.cse5234.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,8 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.osu.cse5234.business.model.Item;
-import edu.osu.cse5234.business.view.Inventory;
-import edu.osu.cse5234.business.view.InventoryService;
+import edu.osu.cse5234.model.LineItem;
 import edu.osu.cse5234.model.Order;
 import edu.osu.cse5234.model.PaymentInfo;
 import edu.osu.cse5234.model.ShippingInfo;
@@ -27,12 +27,22 @@ public class Purchase {
 	@RequestMapping(method = RequestMethod.GET)
 	public String viewOrderEntryForm(HttpServletRequest request) {
 		Order order = new Order();
-		//order.setItems(ServiceLocator.getInventoryService().getAvailableInventory().getItems());
 		List<Item> items = ServiceLocator.getInventoryService().getAvailableInventory().getItems();
+		List<LineItem> lineItems = new ArrayList<LineItem>(items.size());
+		
+		/* convert items to line items */
 		for(Item item: items) {
-			item.setQuantity(0);
+			LineItem lineItem = new LineItem();
+			
+			lineItem.setItemId(item.getId());
+			lineItem.setItemName(item.getName());
+			lineItem.setPrice(item.getPrice());
+			lineItem.setQuantity(0);
+			lineItems.add(lineItem);
 		}
-		order.setItems(items);
+		
+		order.setLineItems(lineItems);
+		
 		request.setAttribute("order", order);
 		return "OrderEntryForm";
 	}
@@ -45,8 +55,9 @@ public class Purchase {
 			request.getSession().setAttribute("invalidItemAvailability", "");
 			return "redirect:/purchase/paymentEntry";
 		} 
-		
+	
 		request.getSession().setAttribute("invalidItemAvailability", "Sorry, these item quantities are no longer available. Please resubmit.");
+		System.out.println(request.getSession().getAttribute("invalidItemAvailability"));
 		return "redirect:/purchase";
 	}
 	
@@ -93,11 +104,11 @@ public class Purchase {
 		}
 		
 		Order currentOrder = (Order) request.getSession().getAttribute("order");
-		List<Item> item_List = currentOrder.getItems();
+		List<LineItem> item_List = currentOrder.getLineItems();
 		double total = 0;
 		
 		for(int i = 0; i < item_List.size(); i++) {
-			Item y = item_List.get(i);
+			LineItem y = item_List.get(i);
 			int quantity = y.getQuantity() == 0 ? 0 : y.getQuantity();
 			total += y.getPrice() * quantity;
 		}

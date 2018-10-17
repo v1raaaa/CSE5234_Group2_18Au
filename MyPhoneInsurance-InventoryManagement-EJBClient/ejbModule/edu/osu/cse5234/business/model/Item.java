@@ -1,4 +1,4 @@
-package edu.osu.cse5234.business.model;
+ package edu.osu.cse5234.business.model;
 
 import java.io.Serializable;
 

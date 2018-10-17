@@ -25,10 +25,10 @@
 	<table>
 		<tr><th>Order Information</th><th></th><th>Total Price: $<%= request.getSession().getAttribute("totalPrice") %></th></tr>	
 		<tr style="font-weight: bold"><td>Item</td><td>Price</td><td>Quantity</td></tr>
-		<c:forEach  items="${order.items}" var="item" varStatus="loop">
+		<c:forEach  items="${order.lineItems}" var="item" varStatus="loop">
 			<c:if test = "${not empty item.quantity}">
 				<tr>
-					<td><c:out value="${item.name}"/></td>
+					<td><c:out value="${item.itemName}"/></td>
 					<td><c:out value="$${item.price}"/></td>
 					<td><c:out value="${item.quantity}"/></td>
 				</tr>

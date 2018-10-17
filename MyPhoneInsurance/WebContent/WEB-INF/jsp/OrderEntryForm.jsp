@@ -13,7 +13,9 @@
 <body>
 	<jsp:include page = "Header.jsp"/>
 	<div>
-		<p class="invalid"><%= request.getSession().getAttribute("invalidItemAvailability")%></p>
+		<c:if test="${sessionScope.invalidItemAvailability != null}">
+			<p class="error"><%= request.getSession().getAttribute("invalidItemAvailability")%></p>		
+		</c:if>
 	</div>
 	<div id="invalid" class="invalid"></div>
 	<form:form name="orderForm" modelAttribute="order" onsubmit="return validateQuantity()" method="post" action="/MyPhoneInsurance/purchase/submitItems">
@@ -23,13 +25,15 @@
 	    		<th>Price</th>
 	    		<th>Quantity</th>
 	    	</tr>
-			<c:forEach items="${order.items}" var="item" varStatus="loop">
+			<c:forEach items="${order.lineItems}" var="lineItem" varStatus="loop">
 				<tr>
-					<td><c:out value="${item.name}"></c:out></td>
-					<td><c:out value="$${item.price}"></c:out></td>
-					<td><form:input path="items[${loop.index}].quantity" /></td>
-					<form:hidden path="items[${loop.index}].name" value="${item.name}"/>
-					<form:hidden path="items[${loop.index}].price" value="${item.price}"/>
+					<td><c:out value="${lineItem.itemName}"></c:out></td>
+					<td><c:out value="$${lineItem.price}"></c:out></td>
+					<td><form:input path="lineItems[${loop.index}].quantity"/></td>
+					<form:hidden path="lineItems[${loop.index}].itemId" value = "${lineItem.id}"/>
+					<form:hidden path="lineItems[${loop.index}].itemName" value = "${lineItem.itemName}"/>
+					<form:hidden path="lineItems[${loop.index}].itemId" value = "${lineItem.itemId}"/>
+					<form:hidden path="lineItems[${loop.index}].price" value = "${lineItem.price}"/>
 				</tr>
 			</c:forEach>
 	    </table>

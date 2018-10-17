@@ -4,10 +4,9 @@ import edu.osu.cse5234.business.model.Item;
 import edu.osu.cse5234.business.view.Inventory;
 import edu.osu.cse5234.business.view.InventoryService;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -24,33 +23,32 @@ public class InventoryServiceBean implements InventoryService {
 	@PersistenceContext
 	private EntityManager entityManager;
 	private final String MY_QUERY = "Select i from Item i";
-	private List<Item> catalog = new ArrayList<Item>();
 
-    /**
-     * Default constructor. 
-     */
     public InventoryServiceBean() {
-    	catalog = null;
     }
 
 	@Override
 	public Inventory getAvailableInventory() {
-		catalog = entityManager.createQuery(MY_QUERY, Item.class).getResultList();
+		List<Item> catalog = entityManager.createQuery(MY_QUERY, Item.class).getResultList();
+		
 		return new Inventory(catalog);
 	}
 
 	@Override
 	public boolean validateQuantity(List<Item> items) {
-		for(Item orderItem: items) {
-			if(orderItem.getQuantity() > 0) {
-				for(Item inventoryItem: catalog) {
-					if(orderItem.getName().equals(inventoryItem.getName())) {
-						if(orderItem.getQuantity() > inventoryItem.getQuantity()) {
-							return false;
-						}
-					}
+		Inventory inventory = getAvailableInventory();
+		
+		HashMap<String, Item> catalogMap = new HashMap<String, Item>();
+		for (Item i : inventory.getItems()) {
+			catalogMap.put(i.getName(), i);
+		}
+		
+		for(Item orderItem : items) {
+			if (catalogMap.containsKey(orderItem.getName())
+				&& orderItem.getQuantity() > 0 
+				&& orderItem.getQuantity() > catalogMap.get(orderItem.getName()).getQuantity()) {
+					return false;
 				}
-			}
 		}
 		return true;
 	}

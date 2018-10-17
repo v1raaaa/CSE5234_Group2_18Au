@@ -196,10 +196,15 @@ li a:hover:not(.active) {
 	
 }
 
-.invalid #invalid {
+.invalid {
 	color: #FF0000;
 	font-weight: bold;
 } 
+
+.error {
+	color: #FF0000;
+	font-weight: bold;
+}
 
 .img-circle{
 	border-radius:50%;
