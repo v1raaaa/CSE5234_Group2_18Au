@@ -19,6 +19,10 @@
 				<td><form:input path="name" /></td>
 			</tr>
 			<tr>
+				<td>Email</td>
+				<td><form:input path="email" /></td>
+			</tr>
+			<tr>
 				<td>Address Line 1</td>
 				<td><form:input path="addressLine1" /></td>
 			</tr>

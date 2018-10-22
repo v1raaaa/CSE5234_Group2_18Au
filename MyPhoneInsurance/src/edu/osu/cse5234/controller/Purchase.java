@@ -127,7 +127,7 @@ public class Purchase {
 		order.setPayment(paymentInfo);
 		order.setShipping(shippingInfo);
 		order.setCustomerName(paymentInfo.getCardHolderName()); // TODO 
-		
+		order.setEmailAddress(shippingInfo.getEmail());
 		String confirmationCode = ServiceLocator.getOrderProcessingService().processOrder((Order) request.getSession().getAttribute("order"));
 		request.getSession().setAttribute("confirmationCode", confirmationCode);
 		return "redirect:/purchase/viewConfirmation";

@@ -19,6 +19,9 @@ public class ShippingInfo {
 	
 	@Transient
 	private String name;
+
+	@Transient
+	private String email;
 	
 	@Column(name = "ADDRESS1")
 	private String addressLine1;
@@ -100,6 +103,15 @@ public class ShippingInfo {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getEmail() {
+		
+		return email;
 	}
 
 }
