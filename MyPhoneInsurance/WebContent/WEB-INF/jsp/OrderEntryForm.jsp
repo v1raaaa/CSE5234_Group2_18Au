@@ -30,7 +30,7 @@
 					<td><c:out value="${lineItem.itemName}"></c:out></td>
 					<td><c:out value="$${lineItem.price}"></c:out></td>
 					<td><form:input path="lineItems[${loop.index}].quantity"/></td>
-					<form:hidden path="lineItems[${loop.index}].itemId" value = "${lineItem.id}"/>
+					<form:hidden path="lineItems[${loop.index}].id" value = "${lineItem.id}"/>
 					<form:hidden path="lineItems[${loop.index}].itemName" value = "${lineItem.itemName}"/>
 					<form:hidden path="lineItems[${loop.index}].itemId" value = "${lineItem.itemId}"/>
 					<form:hidden path="lineItems[${loop.index}].price" value = "${lineItem.price}"/>

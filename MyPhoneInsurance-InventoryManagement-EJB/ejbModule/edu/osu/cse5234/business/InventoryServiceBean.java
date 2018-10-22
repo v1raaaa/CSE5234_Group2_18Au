@@ -22,6 +22,7 @@ public class InventoryServiceBean implements InventoryService {
 	
 	@PersistenceContext
 	private EntityManager entityManager;
+
 	private final String MY_QUERY = "Select i from Item i";
 
     public InventoryServiceBean() {
@@ -57,5 +58,4 @@ public class InventoryServiceBean implements InventoryService {
 	public boolean updateInventory(List<Item> items) {
 		return true;
 	}
-
 }

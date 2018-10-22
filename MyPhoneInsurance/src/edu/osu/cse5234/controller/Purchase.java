@@ -23,7 +23,6 @@ import edu.osu.cse5234.util.ServiceLocator;
 @RequestMapping("/purchase")
 public class Purchase {
 
-
 	@RequestMapping(method = RequestMethod.GET)
 	public String viewOrderEntryForm(HttpServletRequest request) {
 		Order order = new Order();
@@ -32,6 +31,7 @@ public class Purchase {
 		
 		/* convert items to line items */
 		for(Item item: items) {
+			
 			LineItem lineItem = new LineItem();
 			
 			lineItem.setItemId(item.getId());
@@ -49,7 +49,7 @@ public class Purchase {
 	
 	@RequestMapping(path = "/submitItems", method = RequestMethod.POST)
 	public String submitItems(@ModelAttribute("order") Order order, HttpServletRequest request) {
-
+		
 		if (ServiceLocator.getOrderProcessingService().validateItemAvailability(order)) {
 			request.getSession().setAttribute("order", order); // save order in session for confirmation and price calculation
 			request.getSession().setAttribute("invalidItemAvailability", "");
@@ -67,6 +67,7 @@ public class Purchase {
 		if (request.getSession().getAttribute("order") == null) {
 			return "redirect:/purchase";
 		}
+		
 		
 		request.setAttribute("paymentInfo", new PaymentInfo());
 		return "PaymentEntryForm";
@@ -120,6 +121,12 @@ public class Purchase {
 	
 	@RequestMapping(path = "/confirmOrder", method = RequestMethod.POST)
 	public String confirmOrder(HttpServletRequest request) {
+		Order order = (Order) request.getSession().getAttribute("order");
+		ShippingInfo shippingInfo = (ShippingInfo) request.getSession().getAttribute("shippingInfo");
+		PaymentInfo paymentInfo = (PaymentInfo) request.getSession().getAttribute("paymentInfo");
+		order.setPayment(paymentInfo);
+		order.setShipping(shippingInfo);
+		order.setCustomerName(paymentInfo.getCardHolderName()); // TODO 
 		
 		String confirmationCode = ServiceLocator.getOrderProcessingService().processOrder((Order) request.getSession().getAttribute("order"));
 		request.getSession().setAttribute("confirmationCode", confirmationCode);

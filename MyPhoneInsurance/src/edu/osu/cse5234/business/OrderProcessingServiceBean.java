@@ -6,6 +6,8 @@ import java.util.UUID;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import edu.osu.cse5234.business.model.Item;
 import edu.osu.cse5234.model.LineItem;
@@ -18,8 +20,12 @@ import edu.osu.cse5234.util.ServiceLocator;
 @Stateless
 @LocalBean
 public class OrderProcessingServiceBean {
+	
+	
+	@PersistenceContext
+	private EntityManager entityManager;
 
-    /**
+	/**
      * Default constructor. 
      */
     public OrderProcessingServiceBean() {
@@ -27,8 +33,11 @@ public class OrderProcessingServiceBean {
     
     // TODO update
     public String processOrder(Order order) {	
-    	if (validateItemAvailability(order)) {   		
+    	if (validateItemAvailability(order)) {      		
+    		entityManager.persist(order);
+    		
     		ServiceLocator.getInventoryService().updateInventory(convertLineItemsToItemIDs(order.getLineItems()));
+    		entityManager.flush();
     		return UUID.randomUUID().toString();
     	} throw new RuntimeException();
     }
@@ -51,4 +60,12 @@ public class OrderProcessingServiceBean {
     	item.setId(lineItem.getItemId());
     	return item;
     }
+    
+    public EntityManager getEntityManager() {
+		return entityManager;
+	}
+
+	public void setEntityManager(EntityManager entityManager) {
+		this.entityManager = entityManager;
+	}
 }
