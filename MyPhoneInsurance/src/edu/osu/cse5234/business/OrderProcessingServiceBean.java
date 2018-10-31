@@ -8,11 +8,16 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.xml.ws.WebServiceRef;
 
 import edu.osu.cse5234.business.model.Item;
 import edu.osu.cse5234.model.LineItem;
 import edu.osu.cse5234.model.Order;
+import edu.osu.cse5234.model.PaymentInfo;
 import edu.osu.cse5234.util.ServiceLocator;
+
+import com.chase.payment.CreditCardPayment;
+import com.chase.payment.PaymentProcessorService;
 
 /**
  * Session Bean implementation class OrderProcessingServiceBean
@@ -24,6 +29,10 @@ public class OrderProcessingServiceBean {
 	
 	@PersistenceContext
 	private EntityManager entityManager;
+	@WebServiceRef(wsdlLocation = 
+		       "http://localhost:9080/ChaseBankApplication/PaymentProcessorService?wsdl")
+	private PaymentProcessorService service;
+
 
 	/**
      * Default constructor. 
@@ -32,7 +41,16 @@ public class OrderProcessingServiceBean {
     }
     
     // TODO update
-    public String processOrder(Order order) {	
+    public String processOrder(Order order) {
+    	CreditCardPayment creditCardPayment = createCreditCardPayment(order.getPayment());
+    	String paymentResponse = service.getPaymentProcessorPort().processPayment(creditCardPayment); 
+    	int port = Integer.parseInt(paymentResponse);
+    	if(port < 0 ) {
+    		return "payment did not go through.";
+    	}else {
+    		//set confirmationNumber
+    	}
+    	
     	if (validateItemAvailability(order)) {      		
     		entityManager.persist(order);
     		
@@ -42,7 +60,19 @@ public class OrderProcessingServiceBean {
     	} throw new RuntimeException();
     }
     
-    public boolean validateItemAvailability(Order order) {
+    private CreditCardPayment createCreditCardPayment(PaymentInfo payment) {
+    	CreditCardPayment creditCardPayment = new CreditCardPayment();
+    	
+    	creditCardPayment.setHolderName(payment.getCardHolderName());
+    	creditCardPayment.setCreditCardNumber(payment.getCreditCardNumber());
+    	creditCardPayment.setExpirationDate(payment.getExpirationDate());
+    	creditCardPayment.setCvvCode(payment.getCvvCode());
+    	
+    	
+    	return creditCardPayment;
+	}
+
+	public boolean validateItemAvailability(Order order) {
 		return ServiceLocator.getInventoryService().validateQuantity(convertLineItemsToItemIDs(order.getLineItems()));
     }
     
