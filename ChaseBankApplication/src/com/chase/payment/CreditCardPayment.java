@@ -1,6 +1,13 @@
 package com.chase.payment;
- 
-public class CreditCardPayment {
+
+import java.io.Serializable;
+
+public class CreditCardPayment implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8760831185659381736L;
+	
 	private int id;
 	private String cardHolderName;
 	private String creditCardNumber;

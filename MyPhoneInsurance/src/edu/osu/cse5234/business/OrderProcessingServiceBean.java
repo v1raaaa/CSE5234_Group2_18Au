@@ -6,8 +6,11 @@ import java.util.UUID;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.json.Json;
+import javax.json.JsonObject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.ws.rs.core.Response;
 import javax.xml.ws.WebServiceRef;
 
 import edu.osu.cse5234.business.model.Item;
@@ -18,6 +21,8 @@ import edu.osu.cse5234.util.ServiceLocator;
 
 import com.chase.payment.CreditCardPayment;
 import com.chase.payment.PaymentProcessorService;
+import com.ibm.json.java.JSONObject;
+import com.ups.shipping.client.ShippingInitiationClient;
 
 /**
  * Session Bean implementation class OrderProcessingServiceBean
@@ -32,6 +37,8 @@ public class OrderProcessingServiceBean {
 	@WebServiceRef(wsdlLocation = 
 		       "http://localhost:9080/ChaseBankApplication/PaymentProcessorService?wsdl")
 	private PaymentProcessorService service;
+	
+	private static String shippingResourceURI = "http://localhost:9080/UPS/jaxrs";
 
 
 	/**
@@ -42,22 +49,45 @@ public class OrderProcessingServiceBean {
     
     // TODO update
     public String processOrder(Order order) {
-    	CreditCardPayment creditCardPayment = createCreditCardPayment(order.getPayment());
-    	String paymentResponse = service.getPaymentProcessorPort().processPayment(creditCardPayment); 
-    	int port = Integer.parseInt(paymentResponse);
-    	if(port < 0 ) {
-    		return "payment did not go through.";
-    	}else {
-    		//set confirmationNumber
-    	}
     	
-    	if (validateItemAvailability(order)) {      		
-    		entityManager.persist(order);
-    		
-    		ServiceLocator.getInventoryService().updateInventory(convertLineItemsToItemIDs(order.getLineItems()));
-    		entityManager.flush();
-    		return UUID.randomUUID().toString();
-    	} throw new RuntimeException();
+    	if (validateItemAvailability(order)) {
+        	CreditCardPayment creditCardPayment = createCreditCardPayment(order.getPayment());
+        	String paymentResponse = service.getPaymentProcessorPort().processPayment(creditCardPayment); 
+        	int confirmation = Integer.parseInt(paymentResponse);
+        	
+        	if (confirmation < 0) {
+        		return ""; // payment did not go through
+        	}
+        	
+    		ShippingInitiationClient shippingInitiationClient = new ShippingInitiationClient(shippingResourceURI);
+    		    		
+    		JsonObject response = shippingInitiationClient.invokeInitiateShipping(marshallShippingRequest(order));
+
+    		if (response.containsKey("Accepted") && response.getBoolean("Accepted")) {
+    			System.out.println(String.format("UPS Successfully accepted the order. OrderRefId: %d. ShippingReferenceNumber: %d",
+    					response.getInt("OrderRefId"),
+    					response.getInt("ShippingReferenceNumber")));   			
+    			
+    			order.getPayment().setConfirmationNumber(paymentResponse);
+    			order.getShipping().setShippingRefNumber(response.getInt("ShippingReferenceNumber"));
+            	entityManager.persist(order);
+        		
+        		ServiceLocator.getInventoryService().updateInventory(convertLineItemsToItemIDs(order.getLineItems()));
+        		entityManager.flush();
+        		
+        		return paymentResponse;
+    		}         	
+    	} 
+    	return "";
+    }
+    
+    private JsonObject marshallShippingRequest(Order order) {
+    	return Json.createObjectBuilder()
+    			.add("Organization", "MyPhoneInsurance LLC.")
+    			.add("OrderRefId", order.getId())
+    			.add("Zip", order.getShipping().getZip())
+    			.add("ItemsNumber", order.getLineItems().size())
+    			.build();
     }
     
     private CreditCardPayment createCreditCardPayment(PaymentInfo payment) {

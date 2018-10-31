@@ -6,7 +6,7 @@ public class PaymentProcessor {
 	}
 	
 	public String processPayment(CreditCardPayment creditPayment) {
-		return "creditPayment";
+		return "111";
 	}
 
 }
