@@ -1,11 +1,18 @@
 package edu.osu.cse5234.business;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.annotation.Resource;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.jms.ConnectionFactory;
+import javax.jms.JMSConnectionFactory;
+import javax.jms.JMSContext;
+import javax.jms.Queue;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.persistence.EntityManager;
@@ -29,6 +36,7 @@ import com.ups.shipping.client.ShippingInitiationClient;
  */
 @Stateless
 @LocalBean
+@Resource(name="jms/emailQCF", lookup="jms/emailQCF", type=ConnectionFactory.class) 
 public class OrderProcessingServiceBean {
 	
 	
@@ -39,6 +47,13 @@ public class OrderProcessingServiceBean {
 	private PaymentProcessorService service;
 	
 	private static String shippingResourceURI = "http://localhost:9080/UPS/jaxrs";
+	
+	@Inject
+	@JMSConnectionFactory("java:comp/env/jms/emailQCF")
+	private JMSContext jmsContext;
+
+	@Resource(lookup="jms/emailQ")
+	private Queue queue;
 
 
 	/**
@@ -74,6 +89,8 @@ public class OrderProcessingServiceBean {
         		
         		ServiceLocator.getInventoryService().updateInventory(convertLineItemsToItemIDs(order.getLineItems()));
         		entityManager.flush();
+        		
+        		notifyUser(order.getEmailAddress());
         		
         		return paymentResponse;
     		}         	
@@ -128,4 +145,17 @@ public class OrderProcessingServiceBean {
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
+	
+	private void notifyUser(String customerEmail) {
+
+		String message = customerEmail + ":" +
+		       "Your order was successfully submitted. " + 
+		     	"You will hear from us when items are shipped. " + 
+		      	new Date();
+
+		System.out.println("Sending message: " + message);
+		jmsContext.createProducer().send(queue, message);
+		System.out.println("Message Sent!");
+	}
+
 }
