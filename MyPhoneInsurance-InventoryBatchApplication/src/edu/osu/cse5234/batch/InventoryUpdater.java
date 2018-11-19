@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,11 +26,12 @@ public class InventoryUpdater {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		System.out.println("done");
 	}
 
 	private static Connection createConnection() throws SQLException, ClassNotFoundException {
 		Class.forName("org.h2.Driver");
-		Connection conn = DriverManager.getConnection("jdbc:h2:C:\\workspace\\cse5234\\h2db\\MyGolfDB", "sa", "");
+		Connection conn = DriverManager.getConnection("jdbc:h2:C:\\workspace\\cse5234\\h2db\\MyPhoneInsuranceDB;AUTO_SERVER=TRUE", "sa", "");
 		return conn;
 	}
 
@@ -45,13 +47,10 @@ public class InventoryUpdater {
 
 	private static Map<Integer, Integer> getOrderedLineItems(Collection<Integer> newOrderIds,
                 Connection conn)  throws SQLException {
-		// TODO Auto-generated method stub
 		// This method returns a map of two integers. The first Integer is item ID, and 
                  // the second is cumulative requested quantity across all new orders
 		Map<Integer, Integer> map = new HashMap<>();
-		PreparedStatement call = conn.prepareStatement("select * from CUSTOMER_ORDER_LINE_ITEM where CUSTOMER_ORDER_ID_FK IN (?)");
-		Array array = call.getConnection().createArrayOf("Integer", newOrderIds.toArray());
-		call.setArray(1, array);
+		PreparedStatement call = conn.prepareStatement("select * from CUSTOMER_ORDER_LINE_ITEM where CUSTOMER_ORDER_ID_FK IN (" + addCollectionToQuery(newOrderIds) + ")");
 		ResultSet res = call.executeQuery();
 		while(res.next()) {
 			if(res.getInt("QUANTITY")>0){
@@ -67,25 +66,34 @@ public class InventoryUpdater {
 
 	private static void udpateInventory(Map<Integer, Integer> orderedItems, 
                 Connection conn) throws SQLException {
-		// TODO Auto-generated method stub		
 		for(Map.Entry<Integer, Integer> item: orderedItems.entrySet()) {
 			ResultSet rset = conn.createStatement().executeQuery(
                     "select AVAILABLE_QUANTITY from ITEM where ID = " + item.getKey());
-			int curQuantity = rset.getInt(0);
-			conn.createStatement().executeQuery(
-                    "update ITEM set AVAILABLE_QUANTITY = " + (curQuantity - item.getValue()) + "where ID = " + item.getKey() );
+			rset.next();
+			int curQuantity = rset.getInt("AVAILABLE_QUANTITY");
+			conn.createStatement().executeUpdate("update ITEM set AVAILABLE_QUANTITY = " + (curQuantity - item.getValue()) + "where ID = " + item.getKey() );
 		}
-
 	}
 
 	private static void udpateOrderStatus(Collection<Integer> newOrderIds, 
                 Connection conn) throws SQLException {
-		// TODO Auto-generated method stub
-		PreparedStatement call = conn.prepareStatement("update CUSTOMER_ORDER set STATUS = \"PROCESSED\" where ID in (?)");
-		Array array = call.getConnection().createArrayOf("Integer", newOrderIds.toArray());
-		call.setArray(1, array);
-		call.executeQuery();
-
+		PreparedStatement call = conn.prepareStatement("update CUSTOMER_ORDER set STATUS = \'PROCESSED\' where ID in (" + addCollectionToQuery(newOrderIds) + ")");
+		call.executeUpdate();
+	}
+	
+	private static String addCollectionToQuery(Collection<Integer> collection) {
+		StringBuilder sb = new StringBuilder();
+		Object[] array = collection.toArray();
+		
+		for (int i = 0; i < array.length; i++) {
+			sb.append(array[i] + ", ");
+		}
+	
+		if (sb.length() > 0) {
+			sb = sb.deleteCharAt(sb.length() - 1);
+			sb = sb.deleteCharAt(sb.length() - 1);
+		}
+		return sb.toString();
 	}
 
 }
